@@ -33,7 +33,7 @@ def basic_1():
 		right = 0
 		faster = 0
 		to_be_displayed = "No Lecture Selected Yet"
-	return render_template('index.html', slower=slower, right=right, faster=faster, 
+	return render_template('index.html', slower=slower, right=right, faster=faster, lecture='Zoom Lecture',
                             max=max([slower, right, faster]),
                             labels=['Slower', 'Just right', 'Faster'],
                             values=[slower, right, faster])
@@ -55,7 +55,7 @@ def basic_2():
 			slower = 0
 			right = 0
 			faster = 0
-		return render_template('index.html',slower=slower, right=right, faster=faster, 
+		return render_template('index.html',slower=slower, right=right, faster=faster, lecture='Zoom Lecture',
 			max=max([slower, right, faster]),
 							labels=['Slower', 'Just right', 'Faster'],
 							values=[slower, right, faster])
