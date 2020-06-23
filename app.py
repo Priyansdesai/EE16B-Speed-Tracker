@@ -24,54 +24,42 @@ def basic_1():
 	today_lecture = db.child("lecture").get()
 	if today_lecture.val() != None:
 		all_items = list(today_lecture.val().values())
-		lecture = all_items[len(all_items) - 1]
-		to_be_displayed = lecture.split('-')[0] + " Feedback Point " + lecture.split('-')[1]
-		todo = db.child(lecture).get()
-		if todo.val() != None:
-			to = todo.val()
-			list_values = list(to.values())
-			print(list_values)
-			slower = len([val for val in list_values if val == "Slower"])
-			right = len([val for val in list_values if val == "Just right"])
-			faster = len([val for val in list_values if val == "Faster"])
-		else:
-			slower = 0
-			right = 0
-			faster = 0
+		print(all_items)
+		slower = len([val for val in all_items if val == "Slower"])
+		right = len([val for val in all_items if val == "Just right"])
+		faster = len([val for val in all_items if val == "Faster"])
 	else:
 		slower = 0
 		right = 0
 		faster = 0
 		to_be_displayed = "No Lecture Selected Yet"
-	return render_template('index.html',slower=slower, right=right, faster=faster, 
-							lecture=to_be_displayed, 
-							max=max([slower, right, faster]),
-							labels=['Slower', 'Just right', 'Faster'],
-							values=[slower, right, faster])
+	return render_template('index.html', slower=slower, right=right, faster=faster, 
+                            max=max([slower, right, faster]),
+                            labels=['Slower', 'Just right', 'Faster'],
+                            values=[slower, right, faster])
+
 
 @app.route('/', methods=['POST'])
 def basic_2():
 	today_lecture = db.child("lecture").get()
-	all_items = list(today_lecture.val().values())
-	lecture = all_items[len(all_items) - 1]
-	to_be_displayed = lecture.split('-')[0] + " Feedback Point " + lecture.split('-')[1]
 	if request.method == 'POST':
 		option = request.form.getlist('options')
 		choice = option[0]
-		db.child(lecture).push(choice)
-		todo = db.child(lecture).get()
-		to = todo.val()
-		list_values = list(to.values())
-		print(list_values)
-		slower = len([val for val in list_values if val == "Slower"])
-		right = len([val for val in list_values if val == "Just right"])
-		faster = len([val for val in list_values if val == "Faster"])
+		db.child("lecture").push(choice)
+		if db.child("lecture").get().val() != None:
+			all_items = list(db.child("lecture").get().val().values())
+			slower = len([val for val in all_items if val == "Slower"])
+			right = len([val for val in all_items if val == "Just right"])
+			faster = len([val for val in all_items if val == "Faster"])
+		else:
+			slower = 0
+			right = 0
+			faster = 0
 		return render_template('index.html',slower=slower, right=right, faster=faster, 
-			lecture=to_be_displayed,
 			max=max([slower, right, faster]),
 							labels=['Slower', 'Just right', 'Faster'],
 							values=[slower, right, faster])
-	return render_template('index.html', lecture=to_be_displayed)
+	return render_template('index.html')
 
 
 
